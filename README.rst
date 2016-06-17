@@ -25,7 +25,7 @@ so that ``pygmentize`` can use the lexer out of the box:
 
     $ cat example.flow
     data('cpu.utilization').mean().publish()
-    $ pymentize example.flow  # This will show in fancy colors!
+    $ pygmentize example.flow  # This will show in fancy colors!
     data('cpu.utilization').mean().publish()
 
 From source
