@@ -1,6 +1,6 @@
 # Copyright (C) 2016 Maxime Petazzoni <maxime.petazzoni@bulix.org>
 
-from pygments.lexer import RegexLexer, bygroups, include
+from pygments.lexer import RegexLexer, bygroups, default, include, words
 from pygments.token import *  # noqa
 
 
@@ -22,8 +22,8 @@ class SignalFlowLexer(RegexLexer):
             (r'[(),.:]', Punctuation),
             (r'!=|[-*+%/<>=]', Operator),
             (r'(abs|accumulator|bottom|ciel|const|count|data|delta|detect'
-             '|dimensionalize|events|extrapolate|fetch|filter|find|floor'
-             '|graphite|groupby|id|integrate|log|log10|map|math|max|mean'
+             '|dimensionalize|duration|events|extrapolate|fetch|filter|find'
+             '|floor|graphite|groupby|id|integrate|log|log10|map|math|max|mean'
              '|mean_plus_stddev|median|min|newrelic|percentile|pow|print'
              '|publish|random|rateofchange|sample|sample_stddev'
              '|sample_variance|select|size|split|sqrt|stats|stddev|sum'
@@ -31,16 +31,27 @@ class SignalFlowLexer(RegexLexer):
              bygroups(Name.Builtin, Punctuation), 'function'),
             (r'(_collector|_random|_seq|_turnstile)(\()',
              bygroups(Name.Function.Magic, Punctuation), 'function'),
-            (r'lambda(?=\s)', Keyword.Reserved),
+            include('keywords'),
+            (r'(def)((?:\s|\\\s)+)', bygroups(Keyword, Text), 'funcname'),
             include('name'),
             include('numbers'),
             ('"', String.Double, 'dqs'),
             ("'", String.Single, 'sqs'),
         ],
 
+        'keywords': [
+            (words(('if', 'elif', 'else', 'lambda', 'return',), suffix=r'\b'),
+                Keyword),
+        ],
+
         'name': [
             (r'@[\w.]+', Name.Decorator),
             ('[a-zA-Z_]\w*', Name),
+        ],
+
+        'funcname': [
+            ('[a-zA-Z_]\w*', Name.Function, '#pop'),
+            default('#pop'),
         ],
 
         'numbers': [

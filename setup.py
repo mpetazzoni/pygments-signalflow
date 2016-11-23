@@ -12,7 +12,7 @@ with open('README.rst') as f:
 
 setup(
     name='pygments-signalflow',
-    version='0.3',
+    version='0.4',
     author='Maxime Petazzoni',
     author_email='maxime.petazzoni@bulix.org',
     description='Pygments lexer for SignalFlow',
